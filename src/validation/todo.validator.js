@@ -17,10 +17,9 @@ export const createTodoSchema = z.object({
     .enum(["low", "medium", "high"])
     .optional(),
 
-  dueDate: z
-    .string()
-    .datetime()
-    .optional(),
+dueDate: z
+  .string()
+  .optional(),
 
 });
 

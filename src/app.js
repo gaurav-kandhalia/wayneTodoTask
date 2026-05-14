@@ -1,5 +1,6 @@
 import express from "express";
-import cors from "cors";
+import cors from "cors";;
+import morgan from 'morgan'
 
 import userRoutes from "./routes/user.routes.js";
 import listRoutes from './routes/list.routes.js'
@@ -26,6 +27,7 @@ app.use(express.urlencoded({
 }));
 
 app.use(express.static("public"));
+app.use(morgan());
 
 app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/lists",listRoutes)
