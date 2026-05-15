@@ -9,7 +9,9 @@ import {
 
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 
+
 const router = Router();
+
 
 
 // ALL TODO ROUTES ARE PROTECTED

@@ -11,6 +11,10 @@ import {
 } from "../validation/todo.validator.js";
 
 
+import { getIO } from "../socket/socket.js";
+
+
+
 
 // CREATE TODO
 
@@ -51,6 +55,10 @@ export const createTodo = asyncHandler(async (req, res) => {
     list: listId,
     createdBy: req.user._id,
   });
+
+  const io = getIO();
+
+  io.to(listId).emit("todo-created",todo);
 
   return res.status(201).json(
     new ApiResponse(
@@ -138,6 +146,10 @@ export const updateTodo = asyncHandler(async (req, res) => {
     }
   );
 
+  const io = getIO();
+
+  io.to(todo.list._id.toString()).emit("todo-updated",updatedTodo)
+
   return res.status(200).json(
     new ApiResponse(
       200,
@@ -173,7 +185,15 @@ export const deleteTodo = asyncHandler(async (req, res) => {
     throw new ApiError(403, "Access denied");
   }
 
+  const listId = todo.list._id.toString();
+
   await Todo.findByIdAndDelete(id);
+
+  const io = getIO();
+
+  io.to(listId).emit("todo-deleted", {
+  todoId: id,
+});
 
   return res.status(200).json(
     new ApiResponse(

@@ -1,22 +1,37 @@
 import dotenv from 'dotenv'
 import connectDB from './db/db.js'
-
+import http from 'http';
+import { initSocket } from './socket/socket.js';
 import {app} from './app.js'
 dotenv.config({
     path: './.env'
 })
 
-console.log(process.env.PORT,"....")
+const server = http.createServer(app)
+
+initSocket(server)
+
+
+
 
 connectDB()
-.then(
+.then(() => {
 
+    server.listen(process.env.PORT, () => {
 
-app.listen(process.env.PORT,()=>{
-    console.log("Server is listening at port",process.env.PORT)
+        console.log(
+          "Server is listening at port",
+          process.env.PORT
+        );
+
+    });
+
 })
+.catch((err) => {
 
+    console.log(
+      "Database connection failed !!!!",
+      err
+    );
 
-).catch((err)=>{
-    console.log("Database connection failed !!!!",err)
-})
+});
